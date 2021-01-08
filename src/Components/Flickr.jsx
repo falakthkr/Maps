@@ -28,13 +28,22 @@ class FlickrApp extends React.Component{
         this.props.getLocation(search)
     }
 
+   handleKey = (e) => {
+        if (e.key === "Enter") {
+            const {search} = this.state
+            this.props.getSearch(search)
+            this.props.getLocation(search)
+        }
+    }
+
     render(){
         const {data,lat,long} = this.props
         console.log(lat,long)
         return(
            <div align="center">
-               <input placeholder="Search..." value={this.state.search} name="search" onChange={this.handleChange} style={{margin:"2px",width:"70%"}} />
-               <button onClick={this.handleSubmit}>Search</button>
+               <input placeholder="Search..." value={this.state.search} onKeyDown={(e)=>this.handleKey(e)} name="search" onChange={this.handleChange} style={{margin:"2px",width:"70%"}} />
+               <button 
+                    onClick={this.handleSubmit}>Search</button>
                 <div>
                     <h2>Explore the world!</h2>
                     {data.map((item)=>{
