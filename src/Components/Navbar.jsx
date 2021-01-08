@@ -2,7 +2,7 @@ import React from "react"
 import {connect} from "react-redux"
 import { getApi, getLocation, getSearch } from "../Redux/action";
 
-class FlickrApp extends React.Component{
+class Navbar extends React.Component{
     constructor(props){
         super(props)
         this.state = {
@@ -10,23 +10,31 @@ class FlickrApp extends React.Component{
         }
     }
 
-    componentDidMount(){
-        this.props.getApi()
+    handleChange = (e) => {
+        const{name,value} = e.target
+        this.setState({
+            [name] : value
+        })
     }
 
+    handleSubmit = (e) => {
+        e.preventDefault()
+        const {search} = this.state
+        this.props.getSearch(search)
+        this.props.getLocation(search)
+    }
+
+   handleKey = (e) => {
+        if (e.key === "Enter") {
+            const {search} = this.state
+            this.props.getSearch(search)
+            this.props.getLocation(search)
+        }
+    }
     render(){
-        const {data,lat,long} = this.props
-        console.log(lat,long)
         return(
-           <div align="center">
-               {data.slice(0,3).map((item)=>{
-                   return (
-                        <div>
-                            <h4>{item.title}</h4>
-                            <img alt={item.description} width="100%" height="200px" src={item.media.m} />
-                        </div>
-                    )     
-                })}
+            <div class="shadow p-2 bg-danger text-light" align="center">
+                <input placeholder="Search..." value={this.state.search} onKeyDown={(e)=>this.handleKey(e)} name="search" onChange={this.handleChange} style={{margin:"2px",width:"70%"}} />
             </div>
         )
     }
@@ -52,4 +60,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(FlickrApp)
+)(Navbar)
